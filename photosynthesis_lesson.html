@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photosynthesis — Demo Science Lesson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-dark: #1a4a2e;
+    --green-mid: #2d7a50;
+    --green-light: #4caf80;
+    --green-pale: #edf7f1;
+    --bg: #f5f7f5;
+    --card-bg: #ffffff;
+    --text: #1a1a1a;
+    --text-muted: #5a6a60;
+    --border: rgba(0,0,0,0.1);
+    --border-hover: #4caf80;
+    --radius-md: 8px;
+    --radius-lg: 14px;
+  }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--green-dark);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem 2.25rem 2rem;
+    margin-bottom: 1.75rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 240px; height: 240px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.14);
+    color: #c8f5e0;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 0.9rem;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.6rem;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 0.45rem;
+  }
+  .hero p {
+    color: rgba(255,255,255,0.7);
+    font-size: 15px;
+    margin-bottom: 1.5rem;
+    line-height: 1.65;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .hero-meta span {
+    color: rgba(255,255,255,0.6);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .hero-meta i { font-size: 15px; }
+  .pbar-wrap {
+    background: rgba(255,255,255,0.12);
+    border-radius: 10px;
+    height: 5px;
+    margin-top: 1.5rem;
+  }
+  .pbar {
+    height: 5px;
+    border-radius: 10px;
+    background: #6effc0;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+  .plabel {
+    color: rgba(255,255,255,0.45);
+    font-size: 11px;
+    margin-top: 5px;
+    text-align: right;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 7px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .tb {
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 1px solid #d0d8d4;
+    background: #fff;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-family: 'Source Sans 3', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .tb:hover { border-color: var(--green-light); color: var(--green-dark); }
+  .tb.active { background: var(--green-dark); color: #fff; border-color: var(--green-dark); }
+
+  /* PANELS */
+  .sp { display: none; }
+  .sp.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 1.1rem;
+  }
+  .card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text);
+  }
+  .card h3 i { color: var(--green-mid); font-size: 18px; }
+  .card p { font-size: 14px; line-height: 1.75; color: var(--text-muted); }
+
+  .sec-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+
+  /* EQUATION */
+  .eq-box {
+    background: var(--green-pale);
+    border: 1.5px solid var(--green-light);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    text-align: center;
+    margin: 1rem 0;
+  }
+  .eq-main { font-size: 17px; font-weight: 700; color: var(--green-dark); line-height: 2; }
+  .eq-sub { font-size: 13px; color: var(--green-mid); margin-top: 4px; }
+
+  /* INGREDIENTS */
+  .ing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+    margin-top: 1rem;
+  }
+  .ing-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .ing-card:hover { border-color: var(--green-light); transform: translateY(-2px); }
+  .ing-icon { font-size: 28px; display: block; margin-bottom: 6px; }
+  .ing-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .ing-role { font-size: 12px; color: var(--text-muted); margin-top: 4px; display: none; }
+  .ing-card.rev .ing-role { display: block; }
+
+  /* OBJECTIVES */
+  .obj-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1rem; }
+  .obj-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--green-pale);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    color: var(--text);
+  }
+  .obj-item i { color: var(--green-mid); font-size: 16px; flex-shrink: 0; }
+
+  /* STEPS */
+  .step-row { display: flex; gap: 1rem; margin-bottom: 1.2rem; align-items: flex-start; }
+  .step-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--green-dark);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-c h4 { font-size: 14px; font-weight: 600; margin-bottom: 3px; color: var(--text); }
+  .step-c p { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+
+  /* VOCAB */
+  .vocab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+  }
+  .vc {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .vc:hover { border-color: var(--green-light); }
+  .vt { font-size: 14px; font-weight: 600; color: var(--green-mid); margin-bottom: 3px; }
+  .vh { font-size: 11px; color: #aaa; }
+  .vd { font-size: 13px; color: var(--text-muted); line-height: 1.55; display: none; margin-top: 6px; }
+  .vc.open .vd { display: block; }
+
+  /* SIMULATOR */
+  .sim-wrap {
+    background: var(--green-pale);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .sim-row { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+  .sim-lbl { font-size: 13px; color: var(--text-muted); min-width: 115px; display: flex; align-items: center; gap: 5px; }
+  .sim-row input[type=range] { flex: 1; accent-color: var(--green-mid); }
+  .sim-v { font-size: 13px; font-weight: 600; min-width: 44px; text-align: right; color: var(--text); }
+  .sim-out { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.5rem; }
+  .sim-m {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.9rem 1rem;
+    text-align: center;
+  }
+  .sim-ml { font-size: 12px; color: var(--text-muted); margin-bottom: 5px; }
+  .sim-mv { font-size: 22px; font-weight: 700; color: var(--green-mid); }
+  .sim-mu { font-size: 12px; color: var(--text-muted); }
+
+  /* QUIZ */
+  .qq {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .qq-t { font-size: 14px; font-weight: 600; margin-bottom: 0.9rem; color: var(--text); }
+  .qq-opts { display: flex; flex-direction: column; gap: 8px; }
+  .qo {
+    padding: 10px 14px;
+    border: 1px solid #d0d8d4;
+    border-radius: var(--radius-md);
+    background: var(--bg);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    font-family: 'Source Sans 3', sans-serif;
+    color: var(--text);
+  }
+  .qo:hover:not([disabled]) { border-color: var(--green-light); background: var(--green-pale); }
+  .qo.correct { background: #e4f9ed; border-color: var(--green-mid); color: var(--green-dark); font-weight: 600; }
+  .qo.wrong { background: #fdecea; border-color: #c0392b; color: #7b241c; }
+  .qfb { font-size: 13px; margin-top: 8px; padding: 8px 12px; border-radius: var(--radius-md); display: none; line-height: 1.55; }
+  .qfb.show { display: block; }
+  .qfb.cfb { background: #e4f9ed; color: var(--green-dark); }
+  .qfb.wfb { background: #fdecea; color: #7b241c; }
+
+  /* SCORE */
+  .score-box {
+    background: var(--green-dark);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 1rem;
+    display: none;
+  }
+  .sc-big { font-size: 3.2rem; font-weight: 700; line-height: 1; font-family: 'Playfair Display', serif; }
+  .sc-lbl { font-size: 15px; opacity: 0.75; margin-top: 6px; }
+
+  /* BUTTON */
+  .acb {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 18px;
+    background: var(--green-dark);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-family: 'Source Sans 3', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 10px;
+    text-decoration: none;
+  }
+  .acb:hover { background: var(--green-mid); }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    margin-top: 3rem;
+    font-size: 12px;
+    color: #aaa;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-badge"><i class="ti ti-leaf"></i> Science · Grade 6–8</div>
+    <h1>Photosynthesis</h1>
+    <p>How do plants make food from sunlight, water, and air?</p>
+    <div class="hero-meta">
+      <span><i class="ti ti-clock"></i> 45 minutes</span>
+      <span><i class="ti ti-users"></i> Ages 11–13</span>
+      <span><i class="ti ti-star"></i> Life Science</span>
+    </div>
+    <div class="pbar-wrap"><div class="pbar" id="pb"></div></div>
+    <div class="plabel" id="pl">0 of 5 sections visited</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tb active" onclick="go('hook')"><i class="ti ti-bolt"></i> Hook</button>
+    <button class="tb" onclick="go('concept')"><i class="ti ti-book"></i> Concept</button>
+    <button class="tb" onclick="go('explore')"><i class="ti ti-flask"></i> Explore</button>
+    <button class="tb" onclick="go('quiz')"><i class="ti ti-check"></i> Quiz</button>
+    <button class="tb" onclick="go('reflect')"><i class="ti ti-bulb"></i> Reflect</button>
+  </div>
+
+  <!-- HOOK -->
+  <div class="sp active" id="p-hook">
+    <div class="sec-title">1 · Hook — spark curiosity</div>
+    <div class="card">
+      <h3><i class="ti ti-question-mark"></i> Big question</h3>
+      <p style="font-size:16px;color:#1a1a1a;font-weight:600;margin-bottom:0.6rem;">If animals need to eat food to survive — what do plants eat?</p>
+      <p>Plants never go to a store. They never hunt. Yet they grow huge, produce fruit, and feed nearly every living thing on Earth. How?</p>
+    </div>
+    <div class="card">
+      <h3><i class="ti ti-target"></i> Learning objectives</h3>
+      <div class="obj-list">
+        <div class="obj-item"><i class="ti ti-circle-check"></i> Name the raw ingredients plants use to make food</div>
+        <div class="obj-item"><i class="ti ti-circle-check"></i> Explain where the energy that drives photosynthesis comes from</div>
+        <div class="obj-item"><i class="ti ti-circle-check"></i> Write and interpret the photosynthesis equation</div>
+        <div class="obj-item"><i class="ti ti-circle-check"></i> Describe why photosynthesis matters for all life on Earth</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3><i class="ti ti-brain"></i> Activate prior knowledge — tap each card</h3>
+      <p>Do you think plants need this ingredient? Tap each card to find out!</p>
+      <div class="ing-grid">
+        <div class="ing-card" onclick="reveal(this,true,'✓ Absorbed by roots from soil')">
+          <span class="ing-icon">💧</span>
+          <div class="ing-name">Water (H₂O)</div>
+          <div class="ing-role"></div>
+        </div>
+        <div class="ing-card" onclick="reveal(this,true,'✓ Taken in through tiny pores called stomata')">
+          <span class="ing-icon">🌬️</span>
+          <div class="ing-name">Carbon dioxide</div>
+          <div class="ing-role"></div>
+        </div>
+        <div class="ing-card" onclick="reveal(this,true,'✓ Captured by chlorophyll — the energy source')">
+          <span class="ing-icon">☀️</span>
+          <div class="ing-name">Sunlight</div>
+          <div class="ing-role"></div>
+        </div>
+        <div class="ing-card" onclick="reveal(this,false,'✗ Plants produce sugar — they do not absorb it')">
+          <span class="ing-icon">🍬</span>
+          <div class="ing-name">Sugar from soil</div>
+          <div class="ing-role"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCEPT -->
+  <div class="sp" id="p-concept">
+    <div class="sec-title">2 · Core concept — the equation</div>
+    <div class="card">
+      <h3><i class="ti ti-atom"></i> The photosynthesis equation</h3>
+      <p>Photosynthesis is a chemical reaction — like a recipe with specific ingredients and products.</p>
+      <div class="eq-box">
+        <div class="eq-main">6CO₂ + 6H₂O + light energy → C₆H₁₂O₆ + 6O₂</div>
+        <div class="eq-sub">Carbon dioxide + Water + Light → Glucose (sugar) + Oxygen</div>
+      </div>
+      <p>Plants use light energy to split water molecules and combine carbon dioxide into glucose — a sugar used for energy and growth. Oxygen is released as a by-product. That's the air we breathe!</p>
+    </div>
+    <div class="card">
+      <h3><i class="ti ti-map-pin"></i> Where does it happen?</h3>
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-c"><h4>The leaf — the solar panel</h4><p>Flat and wide to catch as much sunlight as possible. The green color comes from a pigment called chlorophyll.</p></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-c"><h4>Chloroplasts — the factories</h4><p>Tiny green structures inside leaf cells. This is exactly where the photosynthesis reaction takes place.</p></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-c"><h4>Chlorophyll — the light trap</h4><p>Green pigment inside chloroplasts. It absorbs red and blue light, reflects green (why plants look green!), and converts light into chemical energy.</p></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div class="step-c"><h4>Stomata — the breathing pores</h4><p>Tiny holes on leaf undersides. CO₂ enters, O₂ exits. Guard cells open and close them depending on conditions.</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3><i class="ti ti-vocabulary"></i> Key vocabulary — tap to reveal</h3>
+      <div class="vocab-grid">
+        <div class="vc" onclick="tv(this)"><div class="vt">Photosynthesis</div><div class="vh">tap to reveal</div><div class="vd">The process plants use to convert light, water, and CO₂ into glucose and oxygen.</div></div>
+        <div class="vc" onclick="tv(this)"><div class="vt">Chlorophyll</div><div class="vh">tap to reveal</div><div class="vd">A green pigment in plant cells that absorbs sunlight to power photosynthesis.</div></div>
+        <div class="vc" onclick="tv(this)"><div class="vt">Chloroplast</div><div class="vh">tap to reveal</div><div class="vd">The organelle (cell structure) where photosynthesis occurs, found in plant cells.</div></div>
+        <div class="vc" onclick="tv(this)"><div class="vt">Glucose</div><div class="vh">tap to reveal</div><div class="vd">A simple sugar (C₆H₁₂O₆) produced by photosynthesis — the plant's energy source.</div></div>
+        <div class="vc" onclick="tv(this)"><div class="vt">Stomata</div><div class="vh">tap to reveal</div><div class="vd">Tiny pores on a leaf's surface allowing gas exchange (CO₂ in, O₂ out).</div></div>
+        <div class="vc" onclick="tv(this)"><div class="vt">Autotroph</div><div class="vh">tap to reveal</div><div class="vd">An organism that makes its own food. Plants are autotrophs. Animals are heterotrophs (they must eat).</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPLORE -->
+  <div class="sp" id="p-explore">
+    <div class="sec-title">3 · Explore — virtual experiment</div>
+    <div class="card">
+      <h3><i class="ti ti-adjustments"></i> Photosynthesis rate simulator</h3>
+      <p style="margin-bottom:1rem;">Adjust the conditions and observe how they affect how much glucose a plant produces per hour.</p>
+      <div class="sim-wrap">
+        <div class="sim-row">
+          <span class="sim-lbl"><i class="ti ti-sun"></i> Light intensity</span>
+          <input type="range" min="0" max="100" value="60" step="1" id="sL" oninput="sim()">
+          <span class="sim-v" id="vL">60%</span>
+        </div>
+        <div class="sim-row">
+          <span class="sim-lbl"><i class="ti ti-cloud"></i> CO₂ level</span>
+          <input type="range" min="0" max="100" value="50" step="1" id="sC" oninput="sim()">
+          <span class="sim-v" id="vC">50%</span>
+        </div>
+        <div class="sim-row">
+          <span class="sim-lbl"><i class="ti ti-droplet"></i> Water supply</span>
+          <input type="range" min="0" max="100" value="70" step="1" id="sW" oninput="sim()">
+          <span class="sim-v" id="vW">70%</span>
+        </div>
+        <div class="sim-row">
+          <span class="sim-lbl"><i class="ti ti-temperature"></i> Temperature</span>
+          <input type="range" min="0" max="50" value="25" step="1" id="sT" oninput="sim()">
+          <span class="sim-v" id="vT">25°C</span>
+        </div>
+        <div class="sim-out">
+          <div class="sim-m">
+            <div class="sim-ml">Glucose produced</div>
+            <div class="sim-mv" id="oG">42</div>
+            <div class="sim-mu">mg / hour</div>
+          </div>
+          <div class="sim-m">
+            <div class="sim-ml">Oxygen released</div>
+            <div class="sim-mv" id="oO">38</div>
+            <div class="sim-mu">ml / hour</div>
+          </div>
+          <div class="sim-m" style="grid-column:1/-1;">
+            <div class="sim-ml">Limiting factor right now</div>
+            <div class="sim-mv" style="font-size:15px;" id="oLim">CO₂ level</div>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--text-muted);">Try setting one factor to 0 — what happens? Which factor is the bottleneck right now?</p>
+    </div>
+    <div class="card">
+      <h3><i class="ti ti-world"></i> Why does it matter for all life?</h3>
+      <p>Photosynthesis is the foundation of nearly every food chain on Earth. Plants convert the sun's energy into chemical energy stored in glucose. Every animal — including us — ultimately depends on that energy. It also produces all the oxygen in our atmosphere.</p>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="sp" id="p-quiz">
+    <div class="sec-title">4 · Check understanding — quick quiz</div>
+
+    <div class="qq" id="q1">
+      <div class="qq-t">1. What is the main product of photosynthesis that plants use for energy?</div>
+      <div class="qq-opts">
+        <button class="qo" onclick="ans(this,'q1',false,'Oxygen is a by-product of photosynthesis, not the energy product.')">Oxygen</button>
+        <button class="qo" onclick="ans(this,'q1',true,'Correct! Glucose (C₆H₁₂O₆) is the sugar produced — the plant\'s energy source.')">Glucose</button>
+        <button class="qo" onclick="ans(this,'q1',false,'Water is an ingredient, not a product of photosynthesis.')">Water</button>
+        <button class="qo" onclick="ans(this,'q1',false,'Carbon dioxide is absorbed as an ingredient, not produced.')">Carbon dioxide</button>
+      </div>
+      <div class="qfb" id="f1"></div>
+    </div>
+
+    <div class="qq" id="q2">
+      <div class="qq-t">2. Which organelle is where photosynthesis takes place?</div>
+      <div class="qq-opts">
+        <button class="qo" onclick="ans(this,'q2',false,'The mitochondria releases energy from glucose — it does not perform photosynthesis.')">Mitochondria</button>
+        <button class="qo" onclick="ans(this,'q2',false,'The nucleus controls the cell but is not the site of photosynthesis.')">Nucleus</button>
+        <button class="qo" onclick="ans(this,'q2',true,'Exactly! Chloroplasts contain chlorophyll and are where photosynthesis occurs.')">Chloroplast</button>
+        <button class="qo" onclick="ans(this,'q2',false,'The cell wall provides structure but is not involved in photosynthesis.')">Cell wall</button>
+      </div>
+      <div class="qfb" id="f2"></div>
+    </div>
+
+    <div class="qq" id="q3">
+      <div class="qq-t">3. What gas do plants absorb from the air for photosynthesis?</div>
+      <div class="qq-opts">
+        <button class="qo" onclick="ans(this,'q3',false,'Oxygen is released by plants as a by-product, not absorbed.')">Oxygen (O₂)</button>
+        <button class="qo" onclick="ans(this,'q3',true,'Correct! Plants absorb CO₂ through their stomata to use as a raw ingredient.')">Carbon dioxide (CO₂)</button>
+        <button class="qo" onclick="ans(this,'q3',false,'Nitrogen makes up most of the atmosphere but is not used in photosynthesis.')">Nitrogen (N₂)</button>
+        <button class="qo" onclick="ans(this,'q3',false,'Plants get hydrogen from splitting water molecules, not from absorbing H₂ gas.')">Hydrogen (H₂)</button>
+      </div>
+      <div class="qfb" id="f3"></div>
+    </div>
+
+    <div class="qq" id="q4">
+      <div class="qq-t">4. Why do leaves appear green?</div>
+      <div class="qq-opts">
+        <button class="qo" onclick="ans(this,'q4',false,'Water is colorless and not responsible for the green color.')">They contain green-colored water</button>
+        <button class="qo" onclick="ans(this,'q4',false,'Leaves absorb — not reflect — most wavelengths of light.')">They reflect all wavelengths of light</button>
+        <button class="qo" onclick="ans(this,'q4',true,'Spot on! Chlorophyll absorbs red and blue light, and reflects green — which our eyes detect.')">Chlorophyll reflects green light</button>
+        <button class="qo" onclick="ans(this,'q4',false,'The color comes from the chlorophyll pigment, not a separate dye.')">They produce a green dye</button>
+      </div>
+      <div class="qfb" id="f4"></div>
+    </div>
+
+    <div class="qq" id="q5">
+      <div class="qq-t">5. What is the term for an organism that makes its own food?</div>
+      <div class="qq-opts">
+        <button class="qo" onclick="ans(this,'q5',false,'A heterotroph must eat other organisms — the opposite of a plant.')">Heterotroph</button>
+        <button class="qo" onclick="ans(this,'q5',false,'A carnivore eats animals — it does not produce its own food from light.')">Carnivore</button>
+        <button class="qo" onclick="ans(this,'q5',true,'Correct! Autotroph means self-feeding. Plants produce their own food via photosynthesis.')">Autotroph</button>
+        <button class="qo" onclick="ans(this,'q5',false,'A decomposer breaks down dead material — it does not make food from light.')">Decomposer</button>
+      </div>
+      <div class="qfb" id="f5"></div>
+    </div>
+
+    <div class="score-box" id="scorebox">
+      <div class="sc-big" id="scbig">0/5</div>
+      <div class="sc-lbl" id="sclbl"></div>
+    </div>
+  </div>
+
+  <!-- REFLECT -->
+  <div class="sp" id="p-reflect">
+    <div class="sec-title">5 · Reflect — consolidate learning</div>
+    <div class="card">
+      <h3><i class="ti ti-writing"></i> Exit ticket</h3>
+      <p style="margin-bottom:0.75rem;">Answer these three questions in your notebook before the lesson ends:</p>
+      <div class="obj-list">
+        <div class="obj-item"><i class="ti ti-number-1"></i> What are the three ingredients a plant needs for photosynthesis?</div>
+        <div class="obj-item"><i class="ti ti-number-2"></i> What two things does photosynthesis produce?</div>
+        <div class="obj-item"><i class="ti ti-number-3"></i> Where does photosynthesis take place inside a plant cell?</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3><i class="ti ti-world"></i> Real-world connections</h3>
+      <p>Deforestation reduces Earth's ability to absorb CO₂, contributing to climate change. Ocean algae perform about 50% of all Earth's photosynthesis. Scientists are even working on artificial photosynthesis machines to create clean fuel from sunlight!</p>
+    </div>
+    <div class="card">
+      <h3><i class="ti ti-arrow-right"></i> Coming up next</h3>
+      <p>In the next lesson we explore <strong>cellular respiration</strong> — the reverse process where plants and animals release the energy stored in glucose. Photosynthesis and respiration are two halves of the same cycle!</p>
+    </div>
+  </div>
+
+  <div class="footer">Demo lesson · Photosynthesis · Middle School Science · Prepared for interview demonstration</div>
+
+</div>
+
+<script>
+  const tabs = ['hook','concept','explore','quiz','reflect'];
+  const visited = new Set(['hook']);
+
+  function go(n) {
+    document.querySelectorAll('.sp').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tb').forEach(b => b.classList.remove('active'));
+    document.getElementById('p-' + n).classList.add('active');
+    document.querySelectorAll('.tb')[tabs.indexOf(n)].classList.add('active');
+    visited.add(n);
+    const pct = Math.round(visited.size / 5 * 100);
+    document.getElementById('pb').style.width = pct + '%';
+    document.getElementById('pl').textContent = visited.size + ' of 5 sections visited';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function reveal(el, ok, txt) {
+    el.classList.add('rev');
+    el.querySelector('.ing-role').textContent = txt;
+    el.style.borderColor = ok ? '#4caf80' : '#e74c3c';
+    el.style.background = ok ? '#edf7f1' : '#fdecea';
+  }
+
+  function tv(el) {
+    el.classList.toggle('open');
+    el.querySelector('.vh').textContent = el.classList.contains('open') ? 'tap to hide' : 'tap to reveal';
+  }
+
+  function sim() {
+    const l = +document.getElementById('sL').value;
+    const c = +document.getElementById('sC').value;
+    const w = +document.getElementById('sW').value;
+    const t = +document.getElementById('sT').value;
+    document.getElementById('vL').textContent = l + '%';
+    document.getElementById('vC').textContent = c + '%';
+    document.getElementById('vW').textContent = w + '%';
+    document.getElementById('vT').textContent = t + '°C';
+    const tf = t <= 0 ? 0 : t <= 10 ? t / 10 * 0.4 : t <= 35 ? 0.4 + (t - 10) / 25 * 0.6 : Math.max(0, 1 - (t - 35) / 15);
+    const tv2 = Math.round(tf * 100);
+    const mn = Math.min(l, c, w, tv2);
+    const rate = mn / 100 * 80;
+    document.getElementById('oG').textContent = Math.round(rate);
+    document.getElementById('oO').textContent = Math.round(rate * 0.9);
+    const vals = { 'Light intensity': l, 'CO₂ level': c, 'Water supply': w, 'Temperature': tv2 };
+    const lk = Object.keys(vals).reduce((a, b) => vals[a] <= vals[b] ? a : b);
+    document.getElementById('oLim').textContent = lk;
+  }
+
+  const scores = {};
+  function ans(btn, qid, ok, fb) {
+    if (scores[qid] !== undefined) return;
+    scores[qid] = ok ? 1 : 0;
+    document.getElementById(qid).querySelectorAll('.qo').forEach(b => b.disabled = true);
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fid = 'f' + qid.replace('q', '');
+    const f = document.getElementById(fid);
+    f.textContent = (ok ? '✓ ' : '✗ ') + fb;
+    f.className = 'qfb show ' + (ok ? 'cfb' : 'wfb');
+    if (Object.keys(scores).length === 5) {
+      const tot = Object.values(scores).reduce((a, b) => a + b, 0);
+      const sb = document.getElementById('scorebox');
+      sb.style.display = 'block';
+      document.getElementById('scbig').textContent = tot + '/5';
+      const msgs = ['Keep reviewing — you\'ll get there!', 'Good effort — go back and review!', 'Almost there — review one more time!', 'Great job!', 'Nearly perfect!', 'Perfect score! Outstanding!'];
+      document.getElementById('sclbl').textContent = msgs[tot];
+    }
+  }
+
+  sim();
+</script>
+</body>
+</html>
